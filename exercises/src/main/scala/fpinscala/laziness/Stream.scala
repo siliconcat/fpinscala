@@ -17,15 +17,44 @@ trait Stream[+A] {
     case Empty => None
     case Cons(h, t) => if (f(h())) Some(h()) else t().find(f)
   }
-  def take(n: Int): Stream[A] = sys.error("todo")
 
-  def drop(n: Int): Stream[A] = sys.error("todo")
+  def take(n: Int): Stream[A] = {
+    def go(n: Int, s: Stream[A], acc: Stream[A]): Stream[A] = {
+      if (n == 0) acc
+      else s match {
+        case Cons(h, t) => Cons(h, () => go(n-1, t(), acc))
+        case _ => acc
+      }
+    }
+    go(n, this, Stream[A]())
+  }
 
-  def takeWhile(p: A => Boolean): Stream[A] = sys.error("todo")
+  def drop(n: Int): Stream[A] = {
+    def go(n: Int, s: Stream[A]): Stream[A] = {
+      if (n == 0) s
+      else s match {
+        case Cons(_, t) => go(n-1, t())
+        case _ => s
+      }
+    }
+    go(n, this)
+  }
+
+  def takeWhile(p: A => Boolean): Stream[A] = {
+    foldRight(empty[A]) { (h,t) =>
+      if (p(h)) Cons(() => h, () => t)
+      else empty[A]
+    }
+  }
 
   def forAll(p: A => Boolean): Boolean = sys.error("todo")
 
   def startsWith[A](s: Stream[A]): Boolean = sys.error("todo")
+
+
+  // Additional
+
+  def toList: List[A] = foldRight(List[A]()) (_ :: _)
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
@@ -44,7 +73,8 @@ object Stream {
     else cons(as.head, apply(as.tail: _*))
 
   val ones: Stream[Int] = Stream.cons(1, ones)
-  def from(n: Int): Stream[Int] = sys.error("todo")
+
+  def from(n: Int): Stream[Int] = cons(n, from(n+1))
 
   def unfold[A, S](z: S)(f: S => Option[(A, S)]): Stream[A] = sys.error("todo")
 }
