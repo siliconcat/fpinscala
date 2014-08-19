@@ -59,5 +59,16 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
     }
   }
 
+  describe("EXERCISE 6: The headOption method") {
+    it("gets the head of the Stream if not empty") {
+      Stream.from(1).headOption should be(Some(1))
+    }
+
+    it ("returns None if the Stream is empty") {
+      Stream.empty.headOption should be(None)
+    }
+  }
+
+
 
 }

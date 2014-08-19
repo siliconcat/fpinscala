@@ -55,6 +55,8 @@ trait Stream[+A] {
   // Additional
 
   def toList: List[A] = foldRight(List[A]()) (_ :: _)
+
+  def headOption: Option[A] = foldRight(None: Option[A])((a,_) => Some(a))
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
