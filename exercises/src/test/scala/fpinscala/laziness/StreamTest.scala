@@ -53,5 +53,11 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
     }
   }
 
+  describe("EXERCISE 4: The forAll method ") {
+    it("terminates early if an element does not match the predicate") {
+      Stream.from(1).forAll(_ < 5) should be(false)
+    }
+  }
+
 
 }

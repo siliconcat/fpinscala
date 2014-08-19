@@ -47,7 +47,7 @@ trait Stream[+A] {
     }
   }
 
-  def forAll(p: A => Boolean): Boolean = sys.error("todo")
+  def forAll(p: A => Boolean): Boolean = foldRight(true)((a,b) => p(a) && b)
 
   def startsWith[A](s: Stream[A]): Boolean = sys.error("todo")
 
