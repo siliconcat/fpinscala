@@ -55,7 +55,7 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
 
   describe("EXERCISE 4: The forAll method ") {
     it("returns true if all the elements in a stream match the predicacte") {
-      Stream.cons(1, Stream.cons(2, Stream.empty)).forAll(_ < 5) should be(true)
+      Stream(1,2).forAll(_ < 5) should be(true)
     }
     it("terminates early if an element does not match the predicate") {
       Stream.from(1).forAll(_ < 5) should be(false)
@@ -82,11 +82,11 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
     }
 
     it("append") {
-      Stream.cons(1, Stream.empty).append(Stream.cons(2, Stream.empty)).toList should be(List(1,2))
+      Stream(1).append(Stream(2,3)).toList should be(List(1,2,3))
     }
 
     it("flatMap") {
-      Stream.from(1).flatMap(x => Stream.cons(x * 3, Stream.cons(x * (-3), Stream.empty))).take(4).toList should be(List(3,-3,6,-6))
+      Stream.from(1).flatMap(x => Stream(x * 3, x * (-3))).take(4).toList should be(List(3,-3,6,-6))
     }
   }
 
