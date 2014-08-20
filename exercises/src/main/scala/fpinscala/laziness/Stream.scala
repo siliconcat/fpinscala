@@ -42,7 +42,7 @@ trait Stream[+A] {
 
   def takeWhile(p: A => Boolean): Stream[A] = {
     foldRight(empty[A]) { (h,t) =>
-      if (p(h)) Cons(() => h, () => t)
+      if (p(h)) cons(h,t)
       else empty[A]
     }
   }
@@ -57,6 +57,14 @@ trait Stream[+A] {
   def toList: List[A] = foldRight(List[A]()) (_ :: _)
 
   def headOption: Option[A] = foldRight(None: Option[A])((a,_) => Some(a))
+
+  def map[B](f: A => B): Stream[B] = foldRight(empty[B])((h,t) => cons(f(h), t))
+
+  def filter(p: A => Boolean): Stream[A] = foldRight(empty[A])((h,t) => if (p(h)) cons(h, t) else t)
+
+  def append[B>:A](s: => Stream[B]): Stream[B] = foldRight(s)((h,t) => cons(h,t))
+
+  def flatMap[B](s: A => Stream[B]): Stream[B] = foldRight(empty[B])((h,t) => s(h).append(t))
 }
 case object Empty extends Stream[Nothing]
 case class Cons[+A](h: () => A, t: () => Stream[A]) extends Stream[A]
