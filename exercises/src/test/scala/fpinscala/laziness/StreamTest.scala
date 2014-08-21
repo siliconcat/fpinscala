@@ -90,6 +90,24 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
     }
   }
 
+  describe("EXERCISE 8: The constant function") {
+    it("returns an infinite Stream of a given value") {
+      Stream.constant(5).take(5).toList should be(List(5,5,5,5,5))
+    }
+  }
+
+  describe("EXERCISE 9: The from function") {
+    it("generates an infinite stream of integers, starting fromn, thenn + 1,n + 2, and so on") {
+      Stream.from(1).take(5).toList should be(List(1,2,3,4,5))
+    }
+  }
+
+  describe("EXERCISE 10: The fibs function") {
+    it("generates the infinite stream of Fibonacci numbers") {
+      Stream.fibs.take(7).toList should be(List(0, 1, 1, 2, 3, 5, 8))
+    }
+  }
+
 
 
 }
