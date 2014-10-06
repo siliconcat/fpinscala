@@ -97,7 +97,7 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
   }
 
   describe("EXERCISE 9: The from function") {
-    it("generates an infinite stream of integers, starting fromn, thenn + 1,n + 2, and so on") {
+    it("generates an infinite stream of integers, starting from, then + 1,n + 2, and so on") {
       Stream.from(1).take(5).toList should be(List(1,2,3,4,5))
     }
   }
@@ -108,6 +108,15 @@ class StreamTest extends FunSpecLike with Matchers with PropertyChecks {
     }
   }
 
+  describe("EXERCISE 11: The unfold function") {
+    it("takes an initial state, and a function for producing both the next state and the next value in the generated stream") {
+      val z = Stream.unfold[Int,Stream[Int]](Stream.empty) {
+        case s@Cons(h, _) => Some((h() * 3, s))
+        case s => Some(1, s)
+      }
 
+      z.take(5).toList should be(List(1,3,6,9,12))
+    }
+  }
 
 }
